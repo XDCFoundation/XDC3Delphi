@@ -1,6 +1,6 @@
 ## XDC3Delphi
 
-XDC3Delphi SDK with support for smart contract XRC20.
+XDC3Delphi SDK with support for XRC20 smart contract.
 
 ## Dependencies
 
@@ -16,10 +16,10 @@ git clone https://github.com/svanas/delphereum.git
 
 ## Search path
 
-Assuming your project is named `MyProject` and you have a projects directory with this structure...
+Assuming your project is named `SDKClient` and you have a projects directory with this structure...
 
 ```
-MyProject
+SDKClient
 XDC3Delphi 
 CryptoLib4Pascal
 delphereum
@@ -37,15 +37,14 @@ SimpleBaseLib4Pascal
 ## To Configure Any Compatible Network 
 
 
-Some changes require in web3.pas in Delepherium
+Some config changes require in web3.pas in delphereum repository you just cloned in your local machine.
 
-For Example to setup Apothem Network
+For Example to setup Apothem Network changes require in web3.pas file 
 
-Changes in web3.pas file 
 
 ## Step 1
 
-Add Apothem Network
+Add any Comapatible Network name in TChain 
 
 For Example
 
@@ -62,9 +61,7 @@ type
 
 ## Step 2
 
-In Funtion TChainHelper.Id
-
-Add CHAIN_ID  51 
+In Funtion TChainHelper.Id add Chain id of that network, i.e., Apothem as 51 
 
 For Example
 
@@ -79,9 +76,7 @@ CHAIN_ID: array[TChain] of Integer = (
 
 ## Step 3
 
-In Function TChainHelper.TxType
-
-Add TX_TYPE  0 
+In Function TChainHelper.TxType add TX_TYPE as 0 
 
 For Example
 
@@ -95,9 +90,8 @@ For Example
 
 ## Step 4
 
-In Function TChainHelper.BlockExplorerURL
+In Function TChainHelper.BlockExplorerURL add Block Explorer Url as  'https://apothemxdcpayrpc.blocksscan.io/' for the Apothem Network
 
-Add BLOCK_EXPLORER_URL  'https://apothemxdcpayrpc.blocksscan.io/'
 
 For Example
 
@@ -109,57 +103,6 @@ BLOCK_EXPLORER_URL: array[TChain] of string = (
     
      ...
   );
-
-## Step 5
-
-In procedure CanSignTransaction 
-
-Comment the Following code...
-
-
-
-
-//        TThread.Synchronize(nil, procedure
-
-//        begin
-
-//{$WARN SYMBOL_DEPRECATED OFF}
-
-//          modalResult := MessageDlg(Format(
-
-//            RS_SIGNATURE_REQUEST,
-
-//            [
-
-//              chainName,                                                  // Network
-
-//              from,                                                       // From
-
-//              &to,                                                        // To
-
-//              fromWei(gasPrice, gwei, 2),                                 // Gas price (gwei)
-
-//              estimatedGas.ToString,                                      // Estimated gas (units)
-
-//              EthToFloat(fromWei(estimatedGas * gasPrice, ether)) * price // Gas fee
-
-//            ]),
-
-//            TMsgDlgType.mtConfirmation, mbYesNo, 0, TMsgDlgBtn.mbNo
-
-//          );
-
-//{$WARN SYMBOL_DEPRECATED DEFAULT}
-
-//        end);
-
-//        callback(modalResult = mrYes, nil);
-
-
-And replace by 
-
-
-callback(True, nil);
 
 
 ## This SDK supports following Read & Write operations
@@ -176,13 +119,18 @@ callback(True, nil);
 
 
 
-## XDC3_Delphi.dpr
+## Test code for XDC3Delphi SDK
+
+The following test project files can be used for calling XRC20 functions in XDC3Delphi SDK
+
+SDK_DELPHI_GUI.dpr 
+
+SDK_DELPHI_GUI.dproj
+
+XDC3_DELPHI.dfm
+
+XDC3_DELPHI.pas
 
 
-XDC3_Delphi.dpr is the test file which shows how we can call the XRC_20 functions.
 
-
-## License
-
-Distributed under the [GNU AGP v3.0 with Commons Clause](https://github.com/svanas/delphereum/blob/master/LICENSE) license.
 
