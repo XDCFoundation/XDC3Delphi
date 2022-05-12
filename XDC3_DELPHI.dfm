@@ -4,8 +4,8 @@ object XRCTokens_Form: TXRCTokens_Form
   BiDiMode = bdLeftToRight
   BorderStyle = bsSingle
   Caption = 'XRCTokens_Form'
-  ClientHeight = 685
-  ClientWidth = 921
+  ClientHeight = 694
+  ClientWidth = 1090
   Color = clSkyBlue
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -46,6 +46,45 @@ object XRCTokens_Form: TXRCTokens_Form
   end
   object Write_Methods: TLabel
     Left = 206
+    Top = 112
+    Width = 131
+    Height = 28
+    Caption = 'Write Methods'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label1: TLabel
+    Left = 664
+    Top = 24
+    Width = 148
+    Height = 30
+    Caption = 'XRC 721 Token'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 584
+    Top = 104
+    Width = 126
+    Height = 28
+    Caption = 'Read Methods'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 878
     Top = 112
     Width = 131
     Height = 28
@@ -164,5 +203,131 @@ object XRCTokens_Form: TXRCTokens_Form
     Caption = 'Transfer From '
     TabOrder = 11
     OnClick = TransferFromButtonClick
+  end
+  object NameXrc721Button: TButton
+    Left = 488
+    Top = 184
+    Width = 137
+    Height = 49
+    Caption = 'Name'
+    TabOrder = 12
+    OnClick = xrc721NameButtonClick
+  end
+  object SymbolXrc721Button: TButton
+    Left = 488
+    Top = 255
+    Width = 137
+    Height = 49
+    Caption = 'Symbol'
+    TabOrder = 13
+    OnClick = xrc721SymbolButtonClick
+  end
+  object TokenUriXrc721Button: TButton
+    Left = 488
+    Top = 320
+    Width = 137
+    Height = 49
+    Caption = 'Token URI'
+    TabOrder = 14
+    OnClick = xrc721TokenUriButtonClick
+  end
+  object TotalSupplyXrc721Button: TButton
+    Left = 488
+    Top = 392
+    Width = 137
+    Height = 49
+    Caption = 'Total Supply'
+    TabOrder = 15
+    OnClick = xrc721TotalSupplyButtonClick
+  end
+  object TokenByIndexXrc721Button: TButton
+    Left = 488
+    Top = 464
+    Width = 137
+    Height = 49
+    Caption = 'Token By Index'
+    TabOrder = 16
+    OnClick = xrc721TokenByIndexButtonClick
+  end
+  object TokenOfOwnerByIndexXrc721Button: TButton
+    Left = 488
+    Top = 536
+    Width = 169
+    Height = 49
+    Caption = 'Token Of Owner By Index'
+    TabOrder = 17
+    OnClick = xrc721TokenOfOwnerByIndexButtonClick
+  end
+  object BalanceOfXrc721Button: TButton
+    Left = 664
+    Top = 184
+    Width = 137
+    Height = 49
+    Caption = 'Balance Of'
+    TabOrder = 18
+    OnClick = xrc721BalanceOfButtonClick
+  end
+  object OwnerOfXrc721Button: TButton
+    Left = 664
+    Top = 255
+    Width = 137
+    Height = 49
+    Caption = 'Owner Of '
+    TabOrder = 19
+    OnClick = xrc721OwnerOfButtonClick
+  end
+  object GetApprovedXrc721Button: TButton
+    Left = 664
+    Top = 320
+    Width = 137
+    Height = 49
+    Caption = 'Get Approved'
+    TabOrder = 20
+    OnClick = xrc721GetApprovedButtonClick
+  end
+  object IsApprovedForAllXrc721Button: TButton
+    Left = 664
+    Top = 392
+    Width = 137
+    Height = 49
+    Caption = 'Is Approved For All'
+    TabOrder = 21
+    OnClick = xrc721IsApprovedForAllButtonClick
+  end
+  object TransferfromXrc721Button: TButton
+    Left = 878
+    Top = 184
+    Width = 137
+    Height = 49
+    Caption = 'Transfer From'
+    TabOrder = 22
+    OnClick = xrc721TransferfromButtonClick
+  end
+  object SafeTransferfromXrc721Button: TButton
+    Left = 878
+    Top = 255
+    Width = 137
+    Height = 49
+    Caption = 'Safe Transfer From'
+    TabOrder = 23
+    OnClick = xrc721SafeTransferfromButtonClick
+  end
+  object ApproveXrc721Button: TButton
+    Left = 878
+    Top = 320
+    Width = 137
+    Height = 49
+    Caption = 'Approve'
+    TabOrder = 24
+    OnClick = xrc721ApproveButtonClick
+  end
+  object SetApprovalForAllXrc721Button: TButton
+    Left = 878
+    Top = 392
+    Width = 137
+    Height = 49
+    Caption = 'Set Approval For All'
+    TabOrder = 25
+    OnClick = xrc721SetApprovalForAllButtonClick
   end
 end

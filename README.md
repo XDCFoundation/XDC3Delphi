@@ -1,6 +1,6 @@
 ## XDC3Delphi
 
-XDC3Delphi SDK with support for XRC20 smart contract.
+XDC3Delphi SDK with support for XRC20 and XRC721 smart contract.
 
 ## Dependencies
 
@@ -107,6 +107,7 @@ BLOCK_EXPLORER_URL: array[TChain] of string = (
 
 ## This SDK supports following Read & Write operations
 
+
   |    XRC20 Token: Read methods                    |   XRC20 Token: Write methods                          |
   |     ---                                         |   ---                                                 | 
   |     name()                                      |   approve(receiverAddress , amount)                   |
@@ -115,6 +116,21 @@ BLOCK_EXPLORER_URL: array[TChain] of string = (
   |     totalSupply()                               |   increaseAllowance(spender, addedValue)              |
   |     balanceOf(account)                          |   decreaseAllowance(spender, subtractedValue)         |
   |     allowance(owner, spender)                   |                                                       |
+  |                                                 |                                                       |
+                                            
+  |    XRC721 Token: Read methods                   |   XRC721 Token: Write methods                         |
+  |     ----                                        |   ----                                                |
+  |     name()                                      |   setApprovalForAll(operatorAddress, booleanValue)    |
+  |     symbol()                                    |   approve(receiverAddress , tokenId)                  |
+  |     totalSupply()                               |   transferFrom(recipient, tokenId)                    |
+  |     balanceOf(owner address)                    |   safeTransferFrom(spender, tokenId)                  |
+  |     ownerOf(tokenId)                            |                                                       |
+  |     tokenURI(tokenId)                           |                                                       |
+  |     tokenByIndex(index)                         |                                                       |
+  |     tokenOfOwnerByIndex(ownerAddress,index)     |                                                       |
+  |     supportInterface(interfaceId)               |                                                       |
+  |     getApproved(tokenId)                        |                                                       |
+  |     isApprovedForAll(ownerAddress,operator)     |                                                       |
   |                                                 |                                                       |
 
 

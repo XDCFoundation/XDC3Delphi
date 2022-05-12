@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,Vcl.ExtCtrls,XRC_20,web3;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,Vcl.ExtCtrls,XRC_20,web3,XRC_721;
 
 type
   TXRCTokens_Form = class(TForm)
@@ -23,6 +23,23 @@ type
     XRC20_Token: TLabel;
     Read_Methods: TLabel;
     Write_Methods: TLabel;
+    NameXrc721Button: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    SymbolXrc721Button: TButton;
+    TokenUriXrc721Button: TButton;
+    TotalSupplyXrc721Button: TButton;
+    TokenByIndexXrc721Button: TButton;
+    TokenOfOwnerByIndexXrc721Button: TButton;
+    BalanceOfXrc721Button: TButton;
+    OwnerOfXrc721Button: TButton;
+    GetApprovedXrc721Button: TButton;
+    IsApprovedForAllXrc721Button: TButton;
+    TransferfromXrc721Button: TButton;
+    SafeTransferfromXrc721Button: TButton;
+    ApproveXrc721Button: TButton;
+    SetApprovalForAllXrc721Button: TButton;
     procedure NameButtonClick(Sender: TObject);
     procedure SymbolButtonClick(Sender: TObject);
     procedure DecimalsButtonClick(Sender: TObject);
@@ -35,6 +52,20 @@ type
     procedure DecreaseAllowanceButtonClick(Sender: TObject);
     procedure TransferXDCButtonClick(Sender: TObject);
     procedure TransferFromButtonClick(Sender: TObject);
+    procedure xrc721NameButtonClick(Sender: TObject);
+    procedure xrc721SymbolButtonClick(Sender: TObject);
+    procedure xrc721TokenUriButtonClick(Sender: TObject);
+    procedure xrc721TotalSupplyButtonClick(Sender: TObject);
+    procedure xrc721TokenByIndexButtonClick(Sender: TObject);
+    procedure xrc721TokenOfOwnerByIndexButtonClick(Sender: TObject);
+    procedure xrc721BalanceOfButtonClick(Sender: TObject);
+    procedure xrc721OwnerOfButtonClick(Sender: TObject);
+    procedure xrc721GetApprovedButtonClick(Sender: TObject);
+    procedure xrc721IsApprovedForAllButtonClick(Sender: TObject);
+    procedure xrc721TransferfromButtonClick(Sender: TObject);
+    procedure xrc721SafeTransferfromButtonClick(Sender: TObject);
+    procedure xrc721ApproveButtonClick(Sender: TObject);
+    procedure xrc721SetApprovalForAllButtonClick(Sender: TObject);
 
 
   private
@@ -42,6 +73,8 @@ type
 
   public
     { Public declarations }
+
+     { XRC20 }
      Namee : string;
      Symbol : string;
      Decimals : string;
@@ -62,6 +95,19 @@ type
      OwnerPrivateKey : string;
      RecipientAddress : string;
      SpenderPrivateKey : string;
+     { XRC721 }
+     TokenURI : string;
+     TokenId : string;
+     TokenByIndex : string;
+     Index, indexNumber : string;
+     TokenOfOwnerByIndex : string;
+     OwnerOf : string;
+     GetApproved : string;
+     IsApprovedForAll : string;
+     OperatorAddress : string;
+     SafeTransferfrom : string;
+     SetApprovalForAll : string;
+     Getbool : string;
   end;
 
 var
@@ -74,7 +120,7 @@ implementation
 
 {$R *.dfm}
 
-
+ {*** XRC20 Token ***}
 
 procedure TXRCTokens_Form.NameButtonClick(Sender: TObject);
 begin
@@ -136,6 +182,7 @@ begin
    end);
 end;
 
+
 procedure TXRCTokens_Form.BalanceOfButtonClick(Sender: TObject);
 begin
    var web3ClassXdc := XRC_20.TWeb3Xdc.Create;
@@ -186,6 +233,7 @@ begin
    end);
 end;
 
+
 procedure TXRCTokens_Form.TransferFromButtonClick(Sender: TObject);
 begin
    var web3ClassXdc := XRC_20.TWeb3Xdc.Create;
@@ -224,6 +272,7 @@ begin
    end);
 end;
 
+
 procedure TXRCTokens_Form.IncreaseAllowanceButtonClick(Sender: TObject);
 begin
    var web3ClassXdc := XRC_20.TWeb3Xdc.Create;
@@ -242,6 +291,7 @@ begin
       ShowMessage(str);
    end);
 end;
+
 
 procedure TXRCTokens_Form.DecreaseAllowanceButtonClick(Sender: TObject);
 begin
@@ -262,6 +312,7 @@ begin
    end);
 end;
 
+
 procedure TXRCTokens_Form.TransferXDCButtonClick(Sender: TObject);
 begin
    var web3ClassXdc := XRC_20.TWeb3Xdc.Create;
@@ -278,5 +329,254 @@ begin
       ShowMessage(str);
    end);
 end;
+
+
+    {*** XRC721 Token ***}
+
+
+procedure TXRCTokens_Form.xrc721NameButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Name','Token Address','');
+
+   Name := web3InterfaceXdc721.TokenName(URL,TokenAddress,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+
+end;
+
+
+procedure TXRCTokens_Form.xrc721SymbolButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Symbol','Token Address','');
+
+   Symbol := web3InterfaceXdc721.TokenSymbol(URL,TokenAddress,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721TokenUriButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Token URI','Token Address','');
+   TokenId := inputbox('Token URI','Token ID','');
+
+   TokenURI := web3InterfaceXdc721.TokenURI(URL,TokenAddress,TokenId,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721TotalSupplyButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('TotalSupply','Token Address','');
+
+   TotalSupply := web3InterfaceXdc721.TotalSupply(URL,TokenAddress,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721TokenByIndexButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Token By Index','Token Address','');
+   indexNumber := inputbox('Token By Index','Index','');
+   var Index  := indexNumber.ToInt64;
+   TokenByIndex := web3InterfaceXdc721.TokenByIndex(URL,TokenAddress,Index,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721TokenOfOwnerByIndexButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Token Of Owner By Index','Token Address','');
+   OwnerAddress := inputbox('Token Of Owner By Index','Owner Address','');
+   indexNumber := inputbox('Token Of Owner By Index','Index','');
+   var Index  := indexNumber.ToInt64;
+
+   TokenOfOwnerByIndex := web3InterfaceXdc721.TokenOfOwnerByIndex(URL,TokenAddress,OwnerAddress,Index,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721BalanceOfButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Balance Of','Token Address','');
+   OwnerAddress := inputbox('Balance Of','Owner Address','');
+
+   BalanceOf :=  web3InterfaceXdc721.BalanceOf(URL,TokenAddress,OwnerAddress,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721OwnerOfButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Owner Of','Token Address','');
+   TokenId := inputbox('Owner Of','Token ID','');
+   var token_Id := TokenId.ToInt64;
+
+   OwnerOf :=  web3InterfaceXdc721.OwnerOf(URL,TokenAddress,token_Id,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721GetApprovedButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   TokenAddress := inputbox('Get Approved','Token Address','');
+   TokenId := inputbox('Get Approved','Token ID','');
+   var token_Id := TokenId.ToInt64;
+
+   GetApproved := web3InterfaceXdc721.GetApproved(URL,TokenAddress,token_Id,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721IsApprovedForAllButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   Network := Apothem;
+   TokenAddress := inputbox('Is Approved For All','Token Address','');
+   OwnerPrivateKey := inputbox('Is Approved For All','Owner Private Key','');
+   OperatorAddress := inputbox('Is Approved For All','Operator Address','');
+
+   IsApprovedForAll := web3InterfaceXdc721.IsApprovedForAll(URL,Network,TokenAddress,OwnerPrivateKey,OperatorAddress,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721TransferfromButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   Network := Apothem;
+   OwnerPrivateKey := inputbox('Transfer from','Owner Private Key','');
+   TokenAddress := inputbox('Transfer From','Token Address','');
+   RecipientAddress := inputbox('Transfer From','Recipent Address','');
+   TokenId := inputbox('Transfer from','Token ID','');
+   var token_Id := TokenId.ToInt64;
+
+   Transferfrom := web3InterfaceXdc721.TransferFrom(URL,Network,OwnerPrivateKey,TokenAddress,RecipientAddress,token_Id,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721SafeTransferfromButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   Network := Apothem;
+   OwnerPrivateKey := inputbox('Safe Transfer from','Owner Private Key','');
+   TokenAddress := inputbox('Safe Transfer from','Token Address','');
+   RecipientAddress := inputbox('Safe Transfer from','Recipent Address','');
+   TokenId := inputbox('Safe Transfer from','Token ID','');
+   var token_Id := TokenId.ToInt64;
+
+   SafeTransferfrom := web3InterfaceXdc721.SafeTransferFrom(URL,Network,OwnerPrivateKey,TokenAddress,RecipientAddress,token_Id,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721ApproveButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   Network := Apothem;
+   OwnerPrivateKey  := inputbox('Approve','Owner Private key','');
+   TokenAddress := inputbox('Approve','Token Address','');
+   SpenderAddress := inputbox('Approve','Spender Address','');
+   TokenId := inputbox('Get Approved','Token ID','');
+   var token_Id := TokenId.ToInt64;
+
+   Approve := web3InterfaceXdc721.Approve(URL,Network,OwnerPrivateKey,TokenAddress,SpenderAddress,token_Id,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
+procedure TXRCTokens_Form.xrc721SetApprovalForAllButtonClick(Sender: TObject);
+begin
+   var web3ClassXdc721 := XRC_721.TWeb3Xdc721.Create;
+   var web3InterfaceXdc721 : XRC_721.IWeb3Xdc721;
+   web3InterfaceXdc721 := web3ClassXdc721;
+
+   Network := Apothem;
+   TokenAddress := inputbox('Set Approval For All','Token Address','');
+   OwnerPrivateKey  := inputbox('Set Approval For All','Owner Private key','');
+   SpenderAddress := inputbox('Set Approval For All','Spender Address','');
+   Getbool := inputbox('Get Set Approval For All','Boolean Value','');
+   var boolean := Getbool.ToBoolean;
+
+   SetApprovalForAll := web3InterfaceXdc721.SetApprovalForAll(URL,Network,TokenAddress,OwnerPrivateKey,SpenderAddress,boolean,procedure(const str: string)
+   begin
+      ShowMessage(str);
+   end);
+end;
+
+
 
 end.
