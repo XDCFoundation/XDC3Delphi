@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,Vcl.ExtCtrls,XRC_20,web3,XRC_721;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,Vcl.ExtCtrls,XRC_20,web3,XRC_721,web3.crypto;
 
 type
   TXRCTokens_Form = class(TForm)
@@ -40,6 +40,7 @@ type
     SafeTransferfromXrc721Button: TButton;
     ApproveXrc721Button: TButton;
     SetApprovalForAllXrc721Button: TButton;
+    Button1: TButton;
     procedure NameButtonClick(Sender: TObject);
     procedure SymbolButtonClick(Sender: TObject);
     procedure DecimalsButtonClick(Sender: TObject);
@@ -66,6 +67,9 @@ type
     procedure xrc721SafeTransferfromButtonClick(Sender: TObject);
     procedure xrc721ApproveButtonClick(Sender: TObject);
     procedure xrc721SetApprovalForAllButtonClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+
+
 
 
   private
@@ -95,7 +99,11 @@ type
      OwnerPrivateKey : string;
      RecipientAddress : string;
      SpenderPrivateKey : string;
+     PrivateKey : TPrivateKey;
      { XRC721 }
+
+
+     InterfaceId: string;
      TokenURI : string;
      TokenId : string;
      TokenByIndex : string;
@@ -197,7 +205,6 @@ begin
       ShowMessage(' Balance Of : ' + str);
    end);
 end;
-
 
 procedure TXRCTokens_Form.AllowanceButtonClick(Sender: TObject);
 begin
@@ -505,13 +512,14 @@ begin
    web3InterfaceXdc721 := web3ClassXdc721;
 
    Network := Apothem;
-   OwnerPrivateKey := inputbox('Transfer from','Owner Private Key','');
+   OwnerPrivateKey := inputbox('Transfer from','Spender Private Key','');
+   OwnerAddress :=  inputbox('Transfer From','Owner Address','');
    TokenAddress := inputbox('Transfer From','Token Address','');
    RecipientAddress := inputbox('Transfer From','Recipent Address','');
    TokenId := inputbox('Transfer from','Token ID','');
    var token_Id := TokenId.ToInt64;
 
-   Transferfrom := web3InterfaceXdc721.TransferFrom(URL,Network,OwnerPrivateKey,TokenAddress,RecipientAddress,token_Id,procedure(const str: string)
+   Transferfrom := web3InterfaceXdc721.TransferFrom(URL,Network,OwnerPrivateKey,OwnerAddress,TokenAddress,RecipientAddress,token_Id,procedure(const str: string)
    begin
       ShowMessage(str);
    end);
@@ -525,13 +533,15 @@ begin
    web3InterfaceXdc721 := web3ClassXdc721;
 
    Network := Apothem;
-   OwnerPrivateKey := inputbox('Safe Transfer from','Owner Private Key','');
+   OwnerPrivateKey := inputbox('Safe Transfer from','Spender Private Key','');
+   OwnerAddress :=  inputbox('Transfer From','Owner Address','');
    TokenAddress := inputbox('Safe Transfer from','Token Address','');
    RecipientAddress := inputbox('Safe Transfer from','Recipent Address','');
    TokenId := inputbox('Safe Transfer from','Token ID','');
    var token_Id := TokenId.ToInt64;
 
-   SafeTransferfrom := web3InterfaceXdc721.SafeTransferFrom(URL,Network,OwnerPrivateKey,TokenAddress,RecipientAddress,token_Id,procedure(const str: string)
+
+   SafeTransferfrom := web3InterfaceXdc721.SafeTransferFrom(URL,Network,OwnerPrivateKey, OwnerAddress, TokenAddress,RecipientAddress,token_Id,procedure(const str: string)
    begin
       ShowMessage(str);
    end);
@@ -577,6 +587,17 @@ begin
    end);
 end;
 
+procedure TXRCTokens_Form.Button1Click(Sender: TObject);
+begin
+
+      var web3ClassXdc := XRC_20.TWeb3Xdc.Create;
+      var web3InterfaceXdc : XRC_20.IWeb3Xdc;
+      web3InterfaceXdc := web3ClassXdc;
+
+      PrivateKey := web3InterfaceXdc.createAccount(web3.crypto.generatePrivateKey('ECDSA', SECP256K1));
+      ShowMessage(PrivateKey);
+
+end;
 
 
 end.

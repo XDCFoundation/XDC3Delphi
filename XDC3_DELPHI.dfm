@@ -16,7 +16,6 @@ object XRCTokens_Form: TXRCTokens_Form
   ParentBiDiMode = False
   Position = poDesigned
   Visible = True
-  PixelsPerInch = 96
   TextHeight = 15
   object XRC20_Token: TLabel
     Left = 104
@@ -329,5 +328,14 @@ object XRCTokens_Form: TXRCTokens_Form
     Caption = 'Set Approval For All'
     TabOrder = 25
     OnClick = xrc721SetApprovalForAllButtonClick
+  end
+  object Button2: TButton
+    Left = 664
+    Top = 464
+    Width = 137
+    Height = 49
+    Caption = 'Create Account'
+    TabOrder = 26
+    OnClick = Button2Click
   end
 end

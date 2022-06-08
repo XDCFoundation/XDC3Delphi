@@ -7,6 +7,7 @@ uses
   web3.eth,
   web3,
   web3.eth.utils,
+  ClpIECPrivateKeyParameters,
   web3.eth.erc20,
   web3.utils,
   web3.eth.types,
@@ -17,6 +18,7 @@ uses
 
       TWeb3Xdc = class;
       IWeb3Xdc = interface
+        function createAccount(params: IECPrivateKeyParameters): TPrivateKey;
         function Tname(url : string; tokenAddress : string; callback : TAsyncStringObject) : string;
         function Tsymbol(url : string; tokenAddress: string; callback : TAsyncStringObject) : string;
         function Tdecimals(url : string; tokenAddress: string;  callback : TAsyncStringObject) : string;
@@ -32,6 +34,7 @@ uses
       end;
 
       TWeb3Xdc = class(TInterfacedObject, IWeb3Xdc)
+        function createAccount(params: IECPrivateKeyParameters): TPrivateKey;
         function Tname(url : string; tokenAddress : string; callback : TAsyncStringObject) : string;
         function Tsymbol(url : string;tokenAddress: string; callback : TAsyncStringObject) : string;
         function Tdecimals(url : string;tokenAddress: string;  callback : TAsyncStringObject) : string;
@@ -147,9 +150,9 @@ function TWeb3Xdc.Tallowance(url : string; tokenAddress: string ; ownerAddress :
 
 function TWeb3Xdc.transfer(url : string; aChain: TChain; ownerPrivateKey: string ; tokenAddress : string ; recipient : string ; amount : string ; callback : TAsyncStringObject ) : string;
     begin
-      var ERC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);    // RPC access to XDC
+      var XRC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);    // RPC access to XDC
         try
-           ERC20.Transfer(
+           XRC20.Transfer(
            ownerPrivateKey,                                         // from private key
            recipient,                                               // to public key
            web3.eth.utils.toWei(amount, ether),                     // 0.001 TST
@@ -162,7 +165,7 @@ function TWeb3Xdc.transfer(url : string; aChain: TChain; ownerPrivateKey: string
            end);
 
            finally
-           ERC20.Free;
+           XRC20.Free;
         end;
 
     end;
@@ -172,10 +175,10 @@ function TWeb3Xdc.transfer(url : string; aChain: TChain; ownerPrivateKey: string
 
 function TWeb3Xdc.approve(url : string; aChain: TChain; ownerPrivateKey: string ; tokenAddress : string ; spenderAddress : string ; amount : string ; callback : TAsyncStringObject ) : string;
     begin
-      var ERC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);            // TST smart contract address
+      var XRC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);            // TST smart contract address
 
         try
-          ERC20.Approve(
+          XRC20.Approve(
           ownerPrivateKey,                              // from private key
           spenderAddress,                               // to public key
           amount,                                       // 0.001 TST
@@ -188,7 +191,7 @@ function TWeb3Xdc.approve(url : string; aChain: TChain; ownerPrivateKey: string 
           end);
 
           finally
-          ERC20.Free;
+          XRC20.Free;
       end;
     end;
 
@@ -214,10 +217,10 @@ function TWeb3Xdc.increaseAllowance(url : string; aChain: TChain; ownerPrivateKe
               previousAllowance :=  BigInteger.Create(amount);
               realAmount :=  userValue+ previousAllowance;
 
-            var ERC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);
+            var XRC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);
 
             try
-              ERC20.Approve(
+              XRC20.Approve(
               ownerPrivateKey,                      // from private key
               spenderAddress,                       // to public key
               realAmount,                           // 0.001 TST
@@ -231,7 +234,7 @@ function TWeb3Xdc.increaseAllowance(url : string; aChain: TChain; ownerPrivateKe
                 end);
 
                 finally
-                ERC20.Free;
+                XRC20.Free;
               end;
 
         end);
@@ -257,10 +260,10 @@ function TWeb3Xdc.decreaseAllowance(url : string; aChain: TChain; ownerPrivateKe
               previousAllowance :=  BigInteger.Create(amount);
               realAmount :=  previousAllowance - userValue;
 
-            var ERC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);
+            var XRC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);
 
             try
-              ERC20.Approve(
+              XRC20.Approve(
               ownerPrivateKey,              // from private key
               spenderAddress,               // to public key
               realAmount,                   // 0.001 TST
@@ -274,7 +277,7 @@ function TWeb3Xdc.decreaseAllowance(url : string; aChain: TChain; ownerPrivateKe
                 end);
 
                 finally
-                ERC20.Free;
+                XRC20.Free;
               end;
         end);
 
@@ -301,12 +304,12 @@ function TWeb3Xdc.decreaseAllowance(url : string; aChain: TChain; ownerPrivateKe
     function TWeb3Xdc.transferFrom(url : string; aChain: TChain; tokenAddress:TAddress; spenderPrivateKey: TPrivateKey; ownerAddress: TAddress; recipient: TAddress; value: BigInteger; callback : TAsyncStringObject ) : string;
     begin
 
-      var ERC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);     // RPC access to XDC
+      var XRC20 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);     // RPC access to XDC
 
       spenderPrivateKey.Address(procedure(addr: TAddress; err: IError)
         begin
           web3.eth.write(
-          ERC20.Client, spenderPrivateKey, ERC20.Contract,
+          XRC20.Client, spenderPrivateKey, XRC20.Contract,
           'transferFrom(address,address,uint256)', [ownerAddress, recipient, web3.utils.toHex(value)],
 
           procedure(hash : TTxHash;    err : IError)
@@ -318,5 +321,11 @@ function TWeb3Xdc.decreaseAllowance(url : string; aChain: TChain; ownerPrivateKe
           end);
        end);
     end;
+
+  function TWeb3Xdc.createAccount(params: IECPrivateKeyParameters): TPrivateKey;
+  begin
+     Result := TPrivateKey(web3.utils.toHex('', params.D.ToByteArrayUnsigned));
+  end;
+
 
 end.

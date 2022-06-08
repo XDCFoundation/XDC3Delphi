@@ -7,6 +7,7 @@ Uses
   web3.eth,
   web3,
   web3.eth.erc721,
+  web3.eth.erc20,
   web3.utils,
   web3.eth.types;
 
@@ -27,8 +28,8 @@ Uses
     function GetApproved(url : string; tokenAddress : string; tokenId: UInt64; callback: TAsyncStringObject): string;
     function IsApprovedForAll(url : string; aChain: TChain; tokenAddress : string ; ownerAddress: TPrivateKey ; operatorAddress : TAddress ; callback : TAsyncStringObject ) : string;
     function SetApprovalForAll(url : string; aChain: TChain; tokenAddress : string ; ownerPrivateKey: TPrivateKey ; operatorAddress : TAddress ; approved : boolean; callback : TAsyncStringObject ) : string;
-    function TransferFrom(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; recipientAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
-    function SafeTransferFrom(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; recipientAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
+    function TransferFrom(url : string; aChain: TChain; spenderPrivateKey: TPrivateKey ; ownerAddress: TAddress; tokenAddress : string ; recipientAddress : TAddress ; tokenId : BigInteger ; callback : TAsyncStringObject ) : string;
+    function SafeTransferFrom(url : string; aChain: TChain; spenderPrivateKey: TPrivateKey ; ownerAddress: TAddress; tokenAddress : string ; recipientAddress : TAddress ; tokenId : BigInteger ; callback : TAsyncStringObject ) : string;
   end;
 
   TWeb3Xdc721 = class(TInterfacedObject, IWeb3Xdc721)
@@ -44,8 +45,8 @@ Uses
    function GetApproved(url : string; tokenAddress : string; tokenId: UInt64; callback: TAsyncStringObject): string;
    function IsApprovedForAll(url : string; aChain: TChain; tokenAddress : string ; ownerAddress: TPrivateKey ; operatorAddress : TAddress ; callback : TAsyncStringObject ) : string;
    function SetApprovalForAll(url : string; aChain: TChain; tokenAddress : string ; ownerPrivateKey: TPrivateKey ; operatorAddress : TAddress ; approved : boolean; callback : TAsyncStringObject ) : string;
-   function TransferFrom(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; recipientAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
-   function SafeTransferFrom(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; recipientAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
+   function TransferFrom(url : string; aChain: TChain; spenderPrivateKey: TPrivateKey ; ownerAddress: TAddress; tokenAddress : string ; recipientAddress : TAddress ; tokenId : BigInteger ; callback : TAsyncStringObject ) : string;
+   function SafeTransferFrom(url : string; aChain: TChain; spenderPrivateKey: TPrivateKey ; ownerAddress: TAddress; tokenAddress : string ; recipientAddress : TAddress ; tokenId : BigInteger ; callback : TAsyncStringObject ) : string;
   end;
 
 
@@ -100,6 +101,7 @@ implementation
          callback(qty.ToString);
     end);
   end;
+
 
   function TWeb3Xdc721.TokenByIndex(url : string; tokenAddress : string; index: UInt64; callback: TAsyncStringObject) : string;
   begin
@@ -164,10 +166,10 @@ implementation
   function TWeb3Xdc721.IsApprovedForAll(url : string; aChain: TChain; tokenAddress : string ; ownerAddress: TPrivateKey ; operatorAddress : TAddress ; callback : TAsyncStringObject ) : string;
     begin
 
-      var ERC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
+      var XRC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
 
       try
-          ERC721.IsApprovedForAll(
+          XRC721.IsApprovedForAll(
           ownerAddress,
           operatorAddress,
           procedure(bool : Boolean;  err : IError)
@@ -179,55 +181,52 @@ implementation
           end);
 
           finally
-          ERC721.Free;
+          XRC721.Free;
       end;
     end;
 
-  function TWeb3Xdc721.TransferFrom(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; recipientAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
+  function TWeb3Xdc721.TransferFrom(url : string; aChain: TChain; spenderPrivateKey: TPrivateKey ; ownerAddress: TAddress; tokenAddress : string ; recipientAddress : TAddress ; tokenId : BigInteger ; callback : TAsyncStringObject ) : string;
     begin
 
-        var TERC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
+         var XRC721 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);     // RPC access to XDC
 
-        try
-          TERC721.Transferfrom(
-          ownerPrivateKey,                                          // from private key
-          recipientAddress,                                         // to public key
-          tokenId,                                                  // 0.001 TST
-          procedure(rcpt : ITxReceipt; err : IError)
+      spenderPrivateKey.Address(procedure(addr: TAddress; err: IError)
+        begin
+          web3.eth.write(
+          XRC721.Client, spenderPrivateKey, XRC721.Contract,
+          'transferFrom(address,address,uint256)', [ownerAddress, recipientAddress, web3.utils.toHex(tokenId)],
+
+          procedure(hash : TTxHash;    err : IError)
           begin
-            if Assigned(err) then
-               callback(err.Message)
-            else
-               callback(String(rcpt.txHash));
-          end);
-
-          finally
-          TERC721.Free;
-        end;
-
-    end;
-
-    function TWeb3Xdc721.SafeTransferFrom(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; recipientAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
-    begin
-
-        var TERC721 := TERC721.Create(TWeb3.Create(Apothem, url),tokenAddress);
-
-        try
-            TERC721.SafeTransferFrom(
-            ownerPrivateKey,                                          // from private key
-            recipientAddress,                                         // to public key
-            tokenId,                                                  // 0.001 TST
-            procedure(rcpt : ITxReceipt; err : IError)
-            begin
               if Assigned(err) then
                  callback(err.Message)
               else
-                 callback(String(rcpt.txHash));
-            end);
+                 callback(string(hash));
+          end);
+       end);
 
-            finally
-            TERC721.Free;
-        end;
+    end;
+
+//  edited.
+    function TWeb3Xdc721.SafeTransferFrom(url : string; aChain: TChain; spenderPrivateKey: TPrivateKey ; ownerAddress: TAddress; tokenAddress : string ; recipientAddress : TAddress ; tokenId : BigInteger ; callback : TAsyncStringObject ) : string;
+    begin
+
+        var XRC721 := TERC20.Create(TWeb3.Create(aChain,url),tokenAddress);     // RPC access to XDC
+
+      spenderPrivateKey.Address(procedure(addr: TAddress; err: IError)
+        begin
+          web3.eth.write(
+          XRC721.Client, spenderPrivateKey, XRC721.Contract,
+          'transferFrom(address,address,uint256)', [ownerAddress, recipientAddress, web3.utils.toHex(tokenId)],
+
+          procedure(hash : TTxHash;    err : IError)
+          begin
+              if Assigned(err) then
+                 callback(err.Message)
+              else
+                 callback(string(hash));
+          end);
+       end);
 
     end;
 
@@ -235,10 +234,10 @@ implementation
     function TWeb3Xdc721.Approve(url : string; aChain: TChain; ownerPrivateKey: TPrivateKey ; tokenAddress : string ; spenderAddress : TAddress ; tokenId : UInt64 ; callback : TAsyncStringObject ) : string;
     begin
 
-      var ERC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
+      var XRC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
 
         try
-          ERC721.Approve(
+          XRC721.Approve(
           ownerPrivateKey,                                 // from private key
           spenderAddress,                                  // to public key
           tokenId,                                        // 0.001 TST
@@ -251,7 +250,7 @@ implementation
           end);
 
           finally
-          ERC721.Free;
+          XRC721.Free;
       end;
     end;
 
@@ -259,10 +258,10 @@ implementation
     function TWeb3Xdc721.SetApprovalForAll(url : string; aChain: TChain; tokenAddress : string ; ownerPrivateKey: TPrivateKey ; operatorAddress : TAddress ; approved : boolean; callback : TAsyncStringObject ) : string;
     begin
 
-        var ERC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
+        var XRC721 := TERC721.Create(TWeb3.Create(aChain,url),tokenAddress);
 
         try
-          ERC721.SetApprovalForAll(
+          XRC721.SetApprovalForAll(
           ownerPrivateKey,
           operatorAddress,
           approved,
@@ -275,7 +274,7 @@ implementation
           end);
 
           finally
-          ERC721.Free;
+          XRC721.Free;
       end;
     end;
 
