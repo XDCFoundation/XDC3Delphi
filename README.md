@@ -1,6 +1,6 @@
 ## XDC3Delphi
 
-XDC3Delphi SDK with support for XRC20 smart contract.
+XDC3Delphi SDK with support for XRC20 and XRC721 smart contract.
 
 ## Dependencies
 
@@ -107,6 +107,7 @@ BLOCK_EXPLORER_URL: array[TChain] of string = (
 
 ## This SDK supports following Read & Write operations
 
+
   |    XRC20 Token: Read methods                    |   XRC20 Token: Write methods                          |
   |     ---                                         |   ---                                                 | 
   |     name()                                      |   approve(receiverAddress , amount)                   |
@@ -116,12 +117,27 @@ BLOCK_EXPLORER_URL: array[TChain] of string = (
   |     balanceOf(account)                          |   decreaseAllowance(spender, subtractedValue)         |
   |     allowance(owner, spender)                   |                                                       |
   |                                                 |                                                       |
+                                            
+  |    XRC721 Token: Read methods                   |   XRC721 Token: Write methods                         |
+  |     ----                                        |   ----                                                |
+  |     name()                                      |   setApprovalForAll(operatorAddress, booleanValue)    |
+  |     symbol()                                    |   approve(receiverAddress , tokenId)                  |
+  |     totalSupply()                               |   transferFrom(recipient, tokenId)                    |
+  |     balanceOf(owner address)                    |   safeTransferFrom(spender, tokenId)                  |
+  |     ownerOf(tokenId)                            |                                                       |
+  |     tokenURI(tokenId)                           |                                                       |
+  |     tokenByIndex(index)                         |                                                       |
+  |     tokenOfOwnerByIndex(ownerAddress,index)     |                                                       |
+  |     supportInterface(interfaceId)               |                                                       |
+  |     getApproved(tokenId)                        |                                                       |
+  |     isApprovedForAll(ownerAddress,operator)     |                                                       |
+  |                                                 |                                                       |
 
 
 
 ## Test code for XDC3Delphi SDK
 
-The following test project files can be used for calling XRC20 functions in XDC3Delphi SDK
+The following test project files can be used for calling XRC20 & XRC721 functions in XDC3Delphi SDK
 
 SDK_DELPHI_GUI.dpr 
 
@@ -130,6 +146,11 @@ SDK_DELPHI_GUI.dproj
 XDC3_DELPHI.dfm
 
 XDC3_DELPHI.pas
+
+### How to copy Transaction hash or Private key ?
+> After perforning operations output will be on GUI pop-up.
+>> Click on pop-up result and press ctrl-c and paste result on notepad.
+>> Then use that result
 
 
 
